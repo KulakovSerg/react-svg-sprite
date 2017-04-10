@@ -1,23 +1,29 @@
 import React from 'react';
+import classNames from 'classnames';
 
-export default function SvgIcon(props) {
-  let classNameArr = ['icon'];
-  let otherAttr = Object.assign({}, props);
+export default function SvgIcon(props = {}) {
+    const name = props.name;
+    if (!name) {
+        return null;
+    }
 
-  classNameArr.push('icon_' + props.name);
-  classNameArr.push(props.className || '');
+    const iconClass = props.iconClass || 'icon';
+    const otherAttr = Object.assign({}, props);
 
-  delete otherAttr.name;
-  delete otherAttr.className;
+    delete otherAttr.name;
+    delete otherAttr.className;
+    delete otherAttr.iconClass;
 
-  return (
-    <svg className={classNameArr.join(' ').trim()} {...otherAttr}>
-      <use xlinkHref={`#${props.name}`} />
-    </svg>
-  )
+    return (
+        <svg
+            className={classNames(
+                iconClass,
+                iconClass + '_' + name,
+                props.className,
+            )}
+            {...otherAttr}
+        >
+            <use xlinkHref={`#${props.name}`} />
+        </svg>
+    );
 }
-
-SvgIcon.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  className: React.PropTypes.string,
-};
